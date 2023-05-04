@@ -1,0 +1,43 @@
+#!/bin/bash
+. /usr/local/lib/docker_utils/docker_run.sh
+. /usr/local/lib/knock_utils/gen_knock_rules.sh
+
+execute_script() {
+  echo "Container name:"
+  read -r CONTAINER_NAME
+  echo "Service port:"
+  read -r SERVICE_PORT
+  echo "Image name:"
+  read -r IMAGE_NAME
+  echo "Security sequence:"
+  read -r SEQUENCE
+  echo "Internal network name:"
+  read -r INTERNAL_NETWORK
+  echo "Public port:"
+  read -r PUBLIC_PORT
+  echo "Protocol:"
+  read -r PROTOCOL
+  echo "Public interface:"
+  read -r PUBLIC_INTERFACE
+  echo "Git repository:"
+  read -r GIT_REPOSITORY
+  echo "Version:"
+  read -r SERVICE_VERSION
+
+  docker build -t "$IMAGE_NAME:$SERVICE_VERSION" "$GIT_REPOSITORY#release/$SERVICE_VERSION"
+
+  local CONTAINER_IP
+  CONTAINER_IP=$(docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$INTERNAL_NETWORK" "$IMAGE_NAME:$SERVICE_VERSION")
+
+  local OPEN_COMMAND="/usr/local/sbin/allow-forward-server $PROTOCOL $PUBLIC_INTERFACE $INTERNAL_NETWORK $PUBLIC_PORT %IP% $CONTAINER_IP $SERVICE_PORT"
+  local CLOSE_COMMAND="/usr/local/sbin/deny-forward-server $PROTOCOL $PUBLIC_INTERFACE $INTERNAL_NETWORK $PUBLIC_PORT %IP% $CONTAINER_IP $SERVICE_PORT"
+
+  local KNOCK_RULES
+  KNOCK_RULES=$(gen_knock_rules "$CONTAINER_NAME" "$SEQUENCE" "$OPEN_COMMAND" "$CLOSE_COMMAND")
+
+  echo "$KNOCK_RULES" >> /etc/knockd.conf
+
+  systemctl restart knockd
+}
+
+execute_script
