@@ -1,6 +1,6 @@
 #!/bin/bash
 . /usr/local/lib/docker_utils/docker_run.sh
-. /usr/local/lib/knock_utils/gen_rules.sh
+. /usr/local/lib/knock_utils/gen_knock_rules.sh
 
 echo "Container name:"
 read -r CONTAINER_NAME
