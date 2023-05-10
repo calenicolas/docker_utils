@@ -8,7 +8,7 @@ function docker_run() {
 
   if ! docker network ls | grep -w "$NETWORK"
   then
-    docker network create --opt com.docker.network.bridge.name="$NETWORK" "$NETWORK"
+    docker network create --opt com.docker.network.bridge.name="$NETWORK" "$NETWORK" > /dev/null 2>&1 &
   fi
 
   CONTAINER_ID=$(docker run -it --rm \
