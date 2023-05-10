@@ -6,6 +6,11 @@ function docker_run() {
   local NETWORK="$3"
   local IMAGE_NAME="$4"
 
+  if ! docker network ls | grep -w "$NETWORK"
+  then
+    docker network create --opt com.docker.network.bridge.name="$NETWORK" "$NETWORK"
+  fi
+
   CONTAINER_ID=$(docker run -it --rm \
     --name "$CONTAINER_NAME" \
     -p "$SERVICE_PORT":"$SERVICE_PORT" \
