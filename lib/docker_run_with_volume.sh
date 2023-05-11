@@ -13,7 +13,7 @@ function docker_run_with_volume() {
     docker network create --opt com.docker.network.bridge.name="$NETWORK" "$NETWORK" > /dev/null 2>&1 &
   fi
 
-  docker volume create "$VOLUME"
+  docker volume create "$VOLUME" > /dev/null 2>&1 &
 
   CONTAINER_ID=$(docker run -it --rm \
     --name "$CONTAINER_NAME" \
