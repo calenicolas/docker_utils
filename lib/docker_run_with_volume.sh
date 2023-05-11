@@ -8,7 +8,9 @@ function docker_run_with_volume() {
   local VOLUME="$5"
   local VOLUME_TARGET="$6"
 
-  if ! docker network ls | grep -w "$NETWORK"
+  NETWORK_EXISTS=$(docker network ls | grep -w "$NETWORK")
+
+  if [ ! "$NETWORK_EXISTS" ]
   then
     docker network create --opt com.docker.network.bridge.name="$NETWORK" "$NETWORK" > /dev/null 2>&1 &
   fi
