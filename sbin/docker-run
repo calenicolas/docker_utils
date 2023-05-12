@@ -1,6 +1,5 @@
 #!/bin/bash
-. /usr/local/lib/docker_utils/docker_run.sh
-. /usr/local/lib/iptables_utils/allow_forward_to_server_from_any.sh
+. /usr/local/lib/docker_utils/public_docker_run.sh
 
 echo "Container name:"
 read -r CONTAINER_NAME
@@ -17,6 +16,4 @@ read -r PROTOCOL
 echo "Public interface:"
 read -r PUBLIC_INTERFACE
 
-CONTAINER_IP=$(docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$INTERNAL_NETWORK" "$IMAGE_NAME")
-
-allow_forward_to_server_from_any "$PROTOCOL" "$PUBLIC_INTERFACE" "$INTERNAL_NETWORK" "$PUBLIC_PORT" "$CONTAINER_IP" "$SERVICE_PORT"
+public_docker_run "$CONTAINER_NAME" "$INTERNAL_NETWORK" "$SERVICE_PORT" "$IMAGE_NAME" "$PROTOCOL" "$PUBLIC_INTERFACE" "$PUBLIC_PORT"

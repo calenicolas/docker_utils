@@ -1,6 +1,5 @@
 #!/bin/bash
-. /usr/local/lib/docker_utils/docker_run.sh
-. /usr/local/lib/iptables_utils/allow_internal_forward_to_server.sh
+. /usr/local/lib/docker_utils/internal_docker_run.sh
 
 echo "Container name:"
 read -r CONTAINER_NAME
@@ -8,13 +7,9 @@ echo "Service port:"
 read -r SERVICE_PORT
 echo "Image name:"
 read -r IMAGE_NAME
+echo "Git repo:"
+read -r GIT_REPO
 echo "Internal network name:"
 read -r INTERNAL_NETWORK
-echo "Protocol:"
-read -r PROTOCOL
-echo "Public interface:"
-read -r PUBLIC_INTERFACE
 
-CONTAINER_IP=$(docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$INTERNAL_NETWORK" "$IMAGE_NAME")
-
-allow_internal_forward_to_server "$PROTOCOL" "$PUBLIC_INTERFACE" "$INTERNAL_NETWORK" "$CONTAINER_IP" "$SERVICE_PORT"
+internal_docker_run "$GIT_REPO" "$IMAGE_NAME" "$CONTAINER_NAME" "$SERVICE_PORT" "$INTERNAL_NETWORK"
