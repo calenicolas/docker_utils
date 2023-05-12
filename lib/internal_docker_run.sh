@@ -15,5 +15,7 @@ function internal_docker_run() {
 
   rm -rf "$TMP_DIR"
 
-  docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$INTERNAL_NETWORK" "$IMAGE_NAME"
+  local IP
+  IP=$(docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$INTERNAL_NETWORK" "$IMAGE_NAME")
+  echo "$IP"
 }
