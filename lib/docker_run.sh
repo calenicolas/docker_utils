@@ -6,7 +6,10 @@ function docker_run() {
   local NETWORK="$3"
   local IMAGE_NAME="$4"
 
-  if [ ! "$(docker network ls | grep -w "$NETWORK")" ]; then
+  NETWORK_EXISTS=$(docker network ls | grep -w "$NETWORK")
+
+  if [ ! "$NETWORK_EXISTS" ]
+  then
     docker network create --opt com.docker.network.bridge.name="$NETWORK" "$NETWORK" > /dev/null 2>&1 &
   fi
 
