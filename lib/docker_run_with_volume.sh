@@ -17,6 +17,7 @@ function docker_run_with_volume() {
 
   CONTAINER_ID=$(docker run -it --rm \
     --name "$CONTAINER_NAME" \
+    -p 0:"$SERVICE_PORT" \
     --network "$NETWORK" \
     --mount type=bind,source="$MOUNT_SOURCE",target="$VOLUME_TARGET" \
     -d "$IMAGE_NAME")
