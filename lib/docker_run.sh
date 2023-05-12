@@ -16,7 +16,6 @@ function docker_run() {
   local CONTAINER_ID
   CONTAINER_ID=$(docker run -it --rm \
     --name "$CONTAINER_NAME" \
-    -p "$SERVICE_PORT":"$SERVICE_PORT" \
     --network "$NETWORK" \
     -d "$IMAGE_NAME")
 
