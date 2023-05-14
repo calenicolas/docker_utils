@@ -5,6 +5,7 @@ function docker_run() {
   local SERVICE_PORT="$2"
   local NETWORK="$3"
   local IMAGE_NAME="$4"
+  local EXTRA_OPTS="${5:-}"
 
   NETWORK_EXISTS=$(docker network ls | grep -w "$NETWORK")
 
@@ -18,6 +19,7 @@ function docker_run() {
     --name "$CONTAINER_NAME" \
     -p 0:"$SERVICE_PORT" \
     --network "$NETWORK" \
+    "$EXTRA_OPTS" \
     -d "$IMAGE_NAME")
 
   local CONTAINER_IP

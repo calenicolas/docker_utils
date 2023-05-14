@@ -1,4 +1,5 @@
 #!/bin/bash
+. /usr/local/lib/docker_utils/docker_run.sh
 
 function docker_run_with_volume() {
   local CONTAINER_NAME="$1"
@@ -8,18 +9,8 @@ function docker_run_with_volume() {
   local MOUNT_SOURCE="$5"
   local VOLUME_TARGET="$6"
 
-  NETWORK_EXISTS=$(docker network ls | grep -w "$NETWORK")
+  local EXTRA_OPTS="--mount type=bind,source=$MOUNT_SOURCE,target=$VOLUME_TARGET"
 
-  if [ ! "$NETWORK_EXISTS" ]
-  then
-    docker network create --opt com.docker.network.bridge.name="$NETWORK" "$NETWORK" > /dev/null 2>&1 &
-  fi
-
-  CONTAINER_ID=$(docker run -it --rm \
-    --name "$CONTAINER_NAME" \
-    -p 0:"$SERVICE_PORT" \
-    --network "$NETWORK" \
-    --mount type=bind,source="$MOUNT_SOURCE",target="$VOLUME_TARGET" \
-    -d "$IMAGE_NAME")
-  docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$CONTAINER_ID"
+  CONTAINER_IP=$(docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$NETWORK" "$IMAGE_NAME" "$EXTRA_OPTS")
+  return "$CONTAINER_IP"
 }
