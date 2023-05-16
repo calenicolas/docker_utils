@@ -11,8 +11,9 @@ function secure_docker_run() {
   local PUBLIC_PORT="$6"
   local SEQUENCE="$7"
   local PROTOCOL="$8"
+  local EXTRA_OPTS="${9:-}"
 
-  CONTAINER_IP=$(docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$INTERNAL_NETWORK" "$IMAGE_NAME")
+  CONTAINER_IP=$(docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$INTERNAL_NETWORK" "$IMAGE_NAME" "$EXTRA_OPTS")
 
   OPEN_COMMAND="/usr/local/sbin/iptables-allow_forward_to_server $PROTOCOL $PUBLIC_INTERFACE $INTERNAL_NETWORK $PUBLIC_PORT %IP% $CONTAINER_IP $SERVICE_PORT"
   CLOSE_COMMAND="/usr/local/sbin/iptables-deny_forward_to_server $PROTOCOL $PUBLIC_INTERFACE $INTERNAL_NETWORK $PUBLIC_PORT %IP% $CONTAINER_IP $SERVICE_PORT"

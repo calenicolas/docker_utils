@@ -1,4 +1,5 @@
 #!/bin/bash
+. /usr/local/lib/docker_utils/get_container_ip.sh
 
 function docker_run() {
   local CONTAINER_NAME="$1"
@@ -22,8 +23,5 @@ function docker_run() {
     "$EXTRA_OPTS" \
     -d "$IMAGE_NAME")
 
-  local CONTAINER_IP
-  CONTAINER_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$CONTAINER_ID")
-
-  echo "$CONTAINER_IP"
+  get_container_ip "$CONTAINER_ID"
 }

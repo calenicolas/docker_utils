@@ -11,6 +11,5 @@ function docker_run_with_volume() {
 
   local EXTRA_OPTS="--mount type=bind,source=$MOUNT_SOURCE,target=$VOLUME_TARGET"
 
-  CONTAINER_IP=$(docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$NETWORK" "$IMAGE_NAME" "$EXTRA_OPTS")
-  return "$CONTAINER_IP"
+  docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$NETWORK" "$IMAGE_NAME" "$EXTRA_OPTS"
 }

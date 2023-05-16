@@ -7,7 +7,5 @@ function internal_docker_run() {
   local SERVICE_PORT=$3
   local INTERNAL_NETWORK=$4
 
-  local IP
-  IP=$(docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$INTERNAL_NETWORK" "$IMAGE_NAME")
-  echo "$IP"
+  docker_run "$CONTAINER_NAME" "$SERVICE_PORT" "$INTERNAL_NETWORK" "$IMAGE_NAME"
 }
